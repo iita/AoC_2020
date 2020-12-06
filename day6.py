@@ -1,8 +1,6 @@
 import string
 import re
 
-
-
 with open('day6_input.txt', 'r') as f:
     wline = f.readlines()
     wline = ''.join(wline)
@@ -16,13 +14,6 @@ with open('day6_input.txt', 'r') as f:
                 n_letters += 1
         sum_total = sum_total + n_letters
     print(sum_total)
-
-
-def get_union_letters(old_s, new_s):
-    old_set = set(old_s)
-    new_set = set(new_s)
-    valid_letters = old_set.intersection(new_set)
-    return valid_letters
 
 
 with open('day6_input.txt', 'r') as f:
