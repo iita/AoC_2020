@@ -1,6 +1,4 @@
-import csv
 import re
-import json
 
 required_fields = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
 
