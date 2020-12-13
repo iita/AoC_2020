@@ -9,6 +9,7 @@ with open('day7_input_test.txt', 'r') as f:
     inner_bags = []
     numbers_col = []
     n_trees = 0
+    bag_dict = {}
     fread = csv.reader(f, delimiter='|')
     for row in fread:
         row = row[0].split('contain')
@@ -18,9 +19,13 @@ with open('day7_input_test.txt', 'r') as f:
         number_bags = re.findall(" ([0-9]+) ", row[1])
         numbers_col.append(number_bags)
         inner_bags.append(contained_bags)
+        bag_dict[containing_bag] = {}
+        for b in range(len(contained_bags)):
+            bag_dict[containing_bag][contained_bags[b]] = int(number_bags[b])
     bags = pd.DataFrame([outer_bags, inner_bags, numbers_col]).T
     bags.columns = ['outer_bag', 'inner_bag', 'n_bags']
 
+print(bag_dict)
 
 
 def get_valid(bag_colours):
@@ -35,40 +40,13 @@ def get_valid(bag_colours):
     return set(all_valid)
 
 
+#valid = get_valid(["shiny gold"])
 
-valid = get_valid(["shiny gold"])
-print(len(valid))
+def get_count(bag_colour):
+    bags_in = bag_dict[bag_colour]
+    bag_c = 0
+    for b in bags_in.keys():
+        kerroin = bags_in[b]
+        n_bags = 0
 
-print(bags.head())
-bags['count_col'] = bags['inner_bag'].apply(len)
-print(bags.head())
-
-def get_tuple(bag_colour):
-    bag_tuples = []
-    valid_bags = bags[bags['outer_bag'] == bag_colour]
-    bag_colours = valid_bags.inner_bag.explode().tolist()
-    bag_numbers = valid_bags.n_bags.explode().tolist()
-    count_col = valid_bags.count_col.explode().tolist()
-    for x in range(count_col[0]):
-        bag_tuples.append((bag_colours[x], bag_numbers[x]))
-    return bag_tuples
-
-n = get_tuple("faded blue")
-print(n)
-
-def count_bags(bag_colour):
-    bag_total = 0
-    bag_tuple = get_tuple(bag_colour)
-    n_bags = bags.loc[bags['outer_bag'] == bag_colour, 'count_col']
-    while bag_tuple:
-        print(bag_tuple)
-        for x in bag_tuple:
-            print(x[0])
-            bag_total = bag_total + n_bags * int(x[1])
-            count_bags(x[0])
-            print(bag_total)
-    print(n_bags)
-
-
-#count_bags("shiny gold")
-
+get_count('shiny gold')
